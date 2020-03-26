@@ -8,11 +8,10 @@ YELLOW='\033[1;33m'
 NC='\033[0m'  # No Color
 
 echo "================ Meta-Remote-Link Local ================"
-echo
 
 remote=$1
 command=$2
-elf=$2
+elf=$3
 if [[ -z $remote ]]; then
     echo -e "${RED}No remote IP is given!${NC}"
     exit 1
@@ -22,32 +21,26 @@ if [[ -z $command ]]; then
     exit 2
 fi
 echo "Command: ${command}"
-if [[ $command == "connect" ]]; then
-    # Pass
-else
-    if [[ $command == "flash" || $command == "flash_connect" ]]; then
-        # Pass
-    else
-        echo -e "${RED}Invalid command!${NC}"
-        exit 1
-    fi
 
-    # Check inputs
-    if [[ -z $elf ]]; then
-        echo -e "${RED}No elf file is given!${NC}"
-        exit 2
-    fi
-    echo "ELF file: ${elf}"
-
-    # Generate MD5
-    md5=`md5 -q ${elf}`
-    echo "MD5: ${actual_md5}"
+if [[ $command != "connect" && $command != "flash" && $command != "flash_connect" ]]; then
+    echo -e "${RED}Invalid command!${NC}"
+    exit 1
 fi
-echo
+
+# Check inputs
+if [[ -z $elf ]]; then
+    echo -e "${RED}No elf file is given!${NC}"
+    exit 2
+fi
+echo "ELF file: ${elf}"
+
+# Generate MD5
+md5=`md5 -q ${elf}`
+echo "MD5: ${md5}"
 
 echo -e "${BLUE}Copying elf file to remote...${NC}"
 scp "${elf}" "${remote}:~/meta.elf"
-echo
+echo -e "${GREEN}Done${NC}"
 
 echo -e "${BLUE}Invoking remote script...${NC}"
-ssh @remote "~/Meta-Remote/Remote-Link/remote.sh ${command} ${elf} ${md5}"
+ssh $remote "~/Meta-Remote/Remote-Link/remote.sh ${command} ~/meta.elf ${md5}"
