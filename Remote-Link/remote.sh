@@ -7,15 +7,14 @@ BLUE='\033[0;34m'
 YELLOW='\033[1;33m'
 NC='\033[0m'  # No Color
 
-echo "================ Meta-Remote-Link ================"
-echo
+echo "================ Meta-Remote-Link Remote ================"
 
 command=$1
 elf=$2
 md5=$3
 if [[ -z $command ]]; then
     echo -e "${RED}No command is given!${NC}"
-    exit 2
+    exit 1
 fi
 echo "Command:      ${command}"
 if [[ $command == "connect" ]]; then
@@ -54,7 +53,10 @@ else
         exit 5
     fi
 fi
-echo
 
-echo -e "${BLUE}Starting OpenOCD...${NC}"
+echo -e "${BLUE}Killing pervious openocd (if any)...${NC}"
+pkill openocd
+echo -e "${GREEN}Done${NC}"
+
+echo -e "${BLUE}Starting openocd...${NC}"
 openocd -f ${DIR}/rm_board_stlink.cfg -c "${cmd}"
