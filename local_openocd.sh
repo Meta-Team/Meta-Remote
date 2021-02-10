@@ -8,7 +8,7 @@ remote=$1
 command=$2
 elf=$3
 if [ -z ${remote+x} ] || [ -z ${command+x} ] || [ -z ${elf+x} ];then
-  echo "usage: $0 <remote IP> connect|flash|flash_connect <elf file>"
+  echo "usage: $0 <remote host>@<remote IP> connect|flash|flash_connect <elf file>"
   exit 1
 fi
 if [ "$command" != "connect" ] && [ "$command" != "flash" ] && [ "$command" != "flash_connect" ];then
@@ -32,4 +32,4 @@ scp "${elf}" "${remote}:/tmp/meta.elf"
 printf "Done\n"
 
 echo -e "${BLUE}Invoking remote script...${NC}"
-ssh "$remote" "remote_openocd.sh ${command} /tmp/meta.elf ${md5}"
+ssh "$remote" "~/Meta-Remote/remote_openocd.sh ${command} /tmp/meta.elf ${md5}"
