@@ -54,6 +54,6 @@ else
 fi
 
 # Killing previous openocd (if any)
-pkill -f "openocd"
+pkill -x "openocd"
 
 openocd -f "${DIR}/rm_board_stlink.cfg" -c "${cmd}"
