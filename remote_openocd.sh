@@ -5,6 +5,8 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 echo "================ Meta-Remote Remote ================"
 
 command=$1
+elf=$2
+md5=$3
 
 if [ -z ${command+x} ]; then
   echo "No command is given!${NC}"
@@ -21,13 +23,11 @@ else
   elif [ "$command" == "flash_connect" ]; then
     cmd="program ${elf} verify reset"
   else
-    echo "Invalid command!"
+    echo "Invalid command: ${command}"
     exit 1
   fi
 
-  # Get and check inputs
-  elf=$2
-  md5=$3
+  # Sanity check
   if [ -z ${elf+x} ]; then
     echo "No elf file is given!"
     exit 1
