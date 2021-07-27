@@ -1,0 +1,11 @@
+[Unit]
+Description=meta_jetson_nano_management
+
+[Service]
+Type=forking
+ExecStart=/home/meta/zkr_test/manage.sh
+ExecReload=/bin/kill -SIGHUP $MAINPID
+ExecStop=/bin/kill -SIGINT $MAINPID
+
+[Install]
+WantedBy=multi-user.target
